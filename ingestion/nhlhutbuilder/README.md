@@ -16,7 +16,7 @@ Before you run this script, make sure you have the necessary libraries and confi
 
 ## Usage
 
-1. Define your scraping parameters in the script. The main method is as follows:
+1. Define your scraping parameters in the notebook. The main method is below.  For each game year in the dictionaries skater_ids and goaltender_ids, the required ranges of populated ids are included.  The user should set values of gameyear, batch_size, and n_batches so that the entire range is ingested over some number of runs.  run_skater and run_goaltender are booleans to populate one position group or the other, as the format of attributes for goaltenders is different than that of skters in the dataset. Output will be available in Databricks FileStore at /FileStore/nhl/nhlhutbuilder on completion.
 
    ```python
    if __name__ == "__main__":
@@ -47,30 +47,5 @@ Before you run this script, make sure you have the necessary libraries and confi
        skater_destination_table = '/FileStore/nhl/ea/skaters'
        run_goaltender = False
        goaltender_destination_table = '/FileStore/nhl/ea/goaltenders'
-       
-       # Initialize the ingestor for skater data
-       if run_skater:
-           if gameyear == 'NHL23':
-               skater_ingestor = nhl23_hut_skater_ingestor(gameyear=gameyear, destination_table=skater_destination_table)
-           else:
-               skater_ingestor = nhl_hut_skater_ingestor(gameyear=gameyear, destination_table=skater_destination_table)
-           
-           # Extract batches and ingest data
-           skater_batches = extract_batches(skater_ids[gameyear], batch_size, n_batches)
-           for i, skater_batch in enumerate(skater_batches):
-               print(f"Batch {i} begin {dt.datetime.now()}")
-               skater_ingestor.ingest_range_to_table(ingest_range=skater_batch)
-               skater_ingestor.write_ingested_records()
-       
-       # Initialize the ingestor for goaltender data
-       if run_goaltender:
-           if gameyear == 'NHL23':
-               goaltender_ingestor = nhl23_hut_goaltender_ingestor(gameyear=gameyear, destination_table=goaltender_destination_table)
-           else:
-               goaltender_ingestor = nhl_hut_goaltender_ingestor(gameyear=gameyear, destination_table=goaltender_destination_table)
-           
-           # Extract batches and ingest data
-           goaltender_batches = extract_batches(goaltender_ids[gameyear], batch_size, n_batches)
-           for goaltender_batch in goaltender_batches:
-               goaltender_ingestor.ingest_range_to_table(ingest_range=goaltender_batch)
-               goaltender_ingestor.write_ingested_records()
+
+   # ... method continues, end of relevant parameters.
