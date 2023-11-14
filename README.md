@@ -19,4 +19,3 @@ Explore each department's folder to dive into detailed documentation and code. F
 - Databricks (Community edition is supported)
 - Additional dependencies specified in each department's documentation.
 
-Happy exploring and analyzing the exciting world of NHL data!
