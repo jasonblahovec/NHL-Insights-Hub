@@ -16,7 +16,7 @@ Before you run this script, make sure you have the necessary libraries and confi
 
 ## Usage
 
-1. Define your scraping parameters in the notebook. The main method is below.  For each game year in the dictionaries skater_ids and goaltender_ids, the required ranges of populated ids are included.  The user should set values of gameyear, batch_size, and n_batches so that the entire range is ingested over some number of runs.  run_skater and run_goaltender are booleans to populate one position group or the other, as the format of attributes for goaltenders is different than that of skters in the dataset. Output will be available in Databricks FileStore at /FileStore/nhl/nhlhutbuilder on completion.
+1. Define your scraping parameters in the notebook. The main method is below.  For each game year in the dictionaries skater_ids and goaltender_ids, the required ranges of populated ids are included.  The user should set values of gameyear, batch_size, and n_batches so that the entire range is ingested over some number of runs.  run_skater and run_goaltender are booleans to populate one position group or the other, as the format of attributes for goaltenders is different than that of skters in the dataset. Output will be available in Databricks FileStore at /FileStore/nhl/ea on completion at the destination tables shown below.
 
    ```python
    if __name__ == "__main__":
