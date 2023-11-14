@@ -3,6 +3,8 @@ Welcome to the NHL Insights Hub, your central repository for comprehensive data 
 
 ## Project Structure
 
+Items in this repository are labeled based on the role they play in the data pipeline:
+
 - **Ingestion:** Maintain and ingest NHL player and game data from the NHL API. Web scraping tools for EA player ratings from NHLHUTBUILDER.com.
 - **Data Engineering:** BigQuery views enhancing raw data upstream of data science analyses.
 - **Data Science:** Python scripts demonstrating various data science capabilities withing the context of the ingested NHL data.
@@ -10,7 +12,7 @@ Welcome to the NHL Insights Hub, your central repository for comprehensive data 
 
 ## Getting Started
 
-Explore each department's folder to dive into detailed documentation and code. Follow the provided instructions to run each script as needed to support your analysis.
+Explore each section's folder to dive into detailed documentation and code. Follow the provided instructions to run each script as needed to support your analysis.
 
 ## Dependencies
 
