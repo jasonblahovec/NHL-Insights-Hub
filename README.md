@@ -20,4 +20,5 @@ Explore each section's folder to dive into detailed documentation and code. Foll
 - BigQuery (for Data Engineering)
 - Databricks (Community edition is supported)
 - Additional dependencies specified in each department's documentation.
+- Google Cloud Platform
 
