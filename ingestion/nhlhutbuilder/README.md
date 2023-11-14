@@ -1,8 +1,8 @@
-# dbc_ingest_batches
+# Ingesting EA NHL Player Ratings with Databricks
 
 ## Overview
 
-This script is intended for use with Databricks Community Edition. It is designed to help you append a subset of "cards" scraped from a provided range of IDs to a destination table. Due to constraints with the Community version, scraping must be done in batches. You can control the batch size and number of batches, allowing you to ingest data from NHLHUTBUILDER in a structured manner.
+The script called dbc_ingest_batches.py in this folder is intended for use with Databricks Community Edition. It is designed to help you append a subset of "cards" scraped from a provided range of IDs to a destination table. Due to memory constraints with the Community version, scraping must be done in batches. You can control the batch size and number of batches, allowing you to ingest data from NHLHUTBUILDER in a structured manner (or completely, if you have more scalable resources!).
 
 ## Getting Started
 
