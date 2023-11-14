@@ -27,4 +27,4 @@ To get started with the "Ingestion" folder, follow these steps:
 3. Refer to the specific README within each subfolder for detailed instructions on setting up and running the code.
 
 
-I hope that this NHL data ingestion prove valuable for your NHL data management and analysis needs! If you have any questions or encounter any issues, feel free to reach out to me.
+I hope that this NHL data ingestion proves valuable for your NHL data management and analysis needs! If you have any questions or encounter any issues, feel free to reach out to me.
