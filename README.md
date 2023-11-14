@@ -1,2 +1,22 @@
 # NHL-Insights-Hub
-Welcome to the NHL Insights Hub, your central repository for comprehensive data analytics and insights into the world of NHL players and their performance. This project organizes data sourced from the NHL API, EA's NHL game ratings, and more, utilizing a structured data product pipeline to demonstrate data science and engineering capabilities arcoss a range of platforms..
+Welcome to the NHL Insights Hub, your central repository for comprehensive data analytics and insights into the world of NHL players and their performance. This project organizes data sourced from the NHL API, EA's NHL game ratings, and more, utilizing a structured data product pipeline to demonstrate data science and engineering capabilities arcoss a range of data platforms.
+
+## Project Structure
+
+- **Ingestion:** Maintain and ingest NHL player and game data from the NHL API. Web scraping tools for EA player ratings from NHLHUTBUILDER.com.
+- **Data Engineering:** BigQuery views enhancing raw data upstream of data science analyses.
+- **Data Science:** Python scripts demonstrating various data science capabilities withing the context of the ingested NHL data.
+- **Business Intelligence/Visualization:** Placeholder for upcoming visualizations demonstrations.
+
+## Getting Started
+
+Explore each department's folder to dive into detailed documentation and code. Follow the provided instructions to run each script as needed to support your analysis.
+
+## Dependencies
+
+- Python 3.x
+- BigQuery (for Data Engineering)
+- Databricks (Community edition is supported)
+- Additional dependencies specified in each department's documentation.
+
+Happy exploring and analyzing the exciting world of NHL data!
