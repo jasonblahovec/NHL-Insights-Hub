@@ -4,8 +4,8 @@
 # COMMAND ----------
 
 # MAGIC %pip install Pillow
-# MAGIC %pip install openai==0.28.1
-# MAGIC %pip install langchain==0.0.327
+# MAGIC %pip install openai
+# MAGIC %pip install langchain
 # MAGIC %pip install tiktoken
 # MAGIC %pip install faiss-cpu
 # MAGIC %pip install pip install unstructured
@@ -38,8 +38,8 @@ import re
 import pandas as pd
 import time
 
-os.environ["SERP_API_KEY"] = '***'
-os.environ["OPENAI_API_KEY"] = 'sk-***'
+os.environ["SERP_API_KEY"] = '05ed1342985e074101a21f584fe403568c7f003856a7797395d9125156df7d0b'
+os.environ["OPENAI_API_KEY"] = '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'
 openai_api_key = os.environ["OPENAI_API_KEY"]
 
 
@@ -381,7 +381,7 @@ class TeammateImpact():
             return None  # Avoid division by zero for an empty list
         total = sum(lst)
         average = total / len(lst)
-        return average
+        return (average)
 
     @staticmethod
     def find_median(lst):
@@ -397,7 +397,7 @@ class TeammateImpact():
             middle2 = sorted_lst[n // 2]
             median = (middle1 + middle2) / 2
 
-        return median
+        return (median)
     def display_image_from_bytes(self, image_bytes):
         image = Image.open(io.BytesIO(image_bytes))
         IPdisplay(image)
@@ -505,6 +505,10 @@ class TeammateLLMAnalysis():
 
 # COMMAND ----------
 
+
+
+# COMMAND ----------
+
 # MAGIC %md # Main Method
 
 # COMMAND ----------
@@ -544,14 +548,47 @@ if __name__ == "__main__":
     input_player_a = 'sidney crosby'
     input_player_b = 'evgeni malkin'
     etl, hyp_testing, llm_layer = create_teammate_profile(input_player_a, input_player_b)
+    print(llm_layer.player_profiles)
 
 # COMMAND ----------
 
-# MAGIC %md # Output
+if __name__ == "__main__":
+    input_player_a = 'sidney crosby'
+    input_player_b = 'pascal dupuis'
+    etl, hyp_testing, llm_layer = create_teammate_profile(input_player_a, input_player_b)
+    print(llm_layer.player_profiles)
 
 # COMMAND ----------
 
-llm_layer.player_profiles
+if __name__ == "__main__":
+    input_player_a = 'alex ovechkin'
+    input_player_b = 'nicklas backstrom'
+    etl, hyp_testing, llm_layer = create_teammate_profile(input_player_a, input_player_b)
+    print(llm_layer.player_profiles)
+
+# COMMAND ----------
+
+if __name__ == "__main__":
+    input_player_a = 'connor mcdavid'
+    input_player_b = 'leon draisaitl'
+    etl, hyp_testing, llm_layer = create_teammate_profile(input_player_a, input_player_b)
+    print(llm_layer.player_profiles)
+
+# COMMAND ----------
+
+if __name__ == "__main__":
+    input_player_a = 'jonathan toews'
+    input_player_b = 'patrick kane'
+    etl, hyp_testing, llm_layer = create_teammate_profile(input_player_a, input_player_b)
+    print(llm_layer.player_profiles)
+
+# COMMAND ----------
+
+if __name__ == "__main__":
+    input_player_a = 'joe thornton'
+    input_player_b = 'patrick marleau'
+    etl, hyp_testing, llm_layer = create_teammate_profile(input_player_a, input_player_b)
+    print(llm_layer.player_profiles)
 
 # COMMAND ----------
 
@@ -559,6 +596,8 @@ llm_layer.player_profiles
 
 # COMMAND ----------
 
+
+# import pyspark.sql.functions as f
 # df_raw_bq_export = spark.read.format("csv").load('/FileStore/nhl/bq_results_20231110_144115_1699627310459__1_.csv', header ='true').where(f.col('game_season')<=f.lit('20222023'))
 # df_raw_bq_export.withColumn('player_fullname', f.expr('lower(player_fullname)')).repartition('player_fullname').write.format("parquet").save("/FileStore/nhl/bq_skater_vs_goaltender_2005_2022", mode = 'overwrite')
 
