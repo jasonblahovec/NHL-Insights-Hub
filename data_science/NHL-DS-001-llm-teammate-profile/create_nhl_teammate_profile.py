@@ -38,8 +38,8 @@ import re
 import pandas as pd
 import time
 
-os.environ["SERP_API_KEY"] = '05ed1342985e074101a21f584fe403568c7f003856a7797395d9125156df7d0b'
-os.environ["OPENAI_API_KEY"] = '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'
+os.environ["SERP_API_KEY"] = ''
+os.environ["OPENAI_API_KEY"] = ''
 openai_api_key = os.environ["OPENAI_API_KEY"]
 
 
