@@ -8,7 +8,7 @@ Contains code that used the currently maintaned NHL API, to be documented and ex
 
 ## old_nhl_api_pre_202311
 
-NOTE THE API USED IN THIS FOLDER WAS DWECOMMISSIONED BY THE NHL IN NOVEMBER 2023.
+NOTE THE API USED IN THIS FOLDER WAS DECOMMISSIONED BY THE NHL IN NOVEMBER 2023.
 
 The "old_nhl_api_pre_202311" subfolder contains the code and scripts necessary for maintaining an up-to-date NHL database in Google BigQuery. It facilitates data ingestion, transformation, and loading (ETL) processes, keeping the NHL data repository in sync with the latest updates. This data is invaluable for various analytics, statistics, and machine learning projects related to NHL data.
 
