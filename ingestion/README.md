@@ -2,15 +2,15 @@
 
 Welcome to the "Ingestion" folder! This repository contains two subfolders, "nhl_api" and "nhlhutbuilder," each serving a distinct purpose for managing and enhancing NHL data. The "nhl_api" subfolder focuses on maintaining an up-to-date NHL database in Google BigQuery, while "nhlhutbuilder" provides a script to scrape EA NHL video game ratings from NHLHUTBUILDER.com, enriching the BigQuery database with additional features.
 
-## Table of Contents
-- [nhl_api](#nhl_api)
-- [nhlhutbuilder](#nhlhutbuilder)
-- [Getting Started](#getting-started)
-
 
 ## nhl_api
+Contains code that used the currently maintaned NHL API, to be documented and expanded.
 
-The "nhl_api" subfolder contains the code and scripts necessary for maintaining an up-to-date NHL database in Google BigQuery. It facilitates data ingestion, transformation, and loading (ETL) processes, keeping the NHL data repository in sync with the latest updates. This data is invaluable for various analytics, statistics, and machine learning projects related to NHL data.
+## old_nhl_api_pre_202311
+
+NOTE THE API USED IN THIS FOLDER WAS DWECOMMISSIONED BY THE NHL IN NOVEMBER 2023.
+
+The "old_nhl_api_pre_202311" subfolder contains the code and scripts necessary for maintaining an up-to-date NHL database in Google BigQuery. It facilitates data ingestion, transformation, and loading (ETL) processes, keeping the NHL data repository in sync with the latest updates. This data is invaluable for various analytics, statistics, and machine learning projects related to NHL data.
 
 ## nhlhutbuilder
 
