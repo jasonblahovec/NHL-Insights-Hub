@@ -9,6 +9,7 @@ import pyspark.sql.functions as f
 from pyspark.sql import Row
 from pyspark.sql.types import ArrayType, IntegerType, StringType
 from pyspark.sql.types import *
+from pyspark.sql.functions import udf
 
 def append_nonea_onice_info(df_plays, df_forwards, df_defense, df_goalies):
     # Define a UDF to split the array into odd-indexed and even-indexed elements
