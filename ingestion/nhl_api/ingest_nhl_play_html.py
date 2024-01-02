@@ -371,16 +371,18 @@ if __name__ == "__main__":
 
     print(errors)
 
-    df_out.write.format("parquet").save("/FileStore/NHL_PLAYS_DB/raw_plays", mode = 'overwrite')
-    df_out_forwards.write.format("parquet").save("/FileStore/NHL_PLAYS_DB/raw_forwards", mode = 'overwrite')
-    df_out_defense.write.format("parquet").save("/FileStore/NHL_PLAYS_DB/raw_defense", mode = 'overwrite')
-    df_out_goalies.write.format("parquet").save("/FileStore/NHL_PLAYS_DB/raw_goalies", mode = 'overwrite')
 
-    df_plays = spark.read.format("parquet").load("/FileStore/NHL_PLAYS_DB/raw_plays")
-    df_forwards = clean_name_col(spark.read.format("parquet").load("/FileStore/NHL_PLAYS_DB/raw_forwards"))
-    df_defense = clean_name_col(spark.read.format("parquet").load("/FileStore/NHL_PLAYS_DB/raw_defense"))
-    df_goalies = clean_name_col(spark.read.format("parquet").load("/FileStore/NHL_PLAYS_DB/raw_goalies"))
+    df_out.write.format("parquet").mode("overwrite").option("overwriteSchema", "true").save(f"gs://{bucket_name}/{output_destination}/raw_plays")
+    df_out_forwards.write.format("parquet").mode("overwrite").option("overwriteSchema", "true").save(f"gs://{bucket_name}/{output_destination}/raw_forwards")
+    df_out_defense.write.format("parquet").mode("overwrite").option("overwriteSchema", "true").save(f"gs://{bucket_name}/{output_destination}/raw_defense")
+    df_out_goalies.write.format("parquet").mode("overwrite").option("overwriteSchema", "true").save(f"gs://{bucket_name}/{output_destination}/raw_goalies")
+
+
+    df_plays = spark.read.format("parquet").load(f"gs://{bucket_name}/{output_destination}/raw_plays")
+    df_forwards = clean_name_col(spark.read.format("parquet").load(f"gs://{bucket_name}/{output_destination}/raw_forwards"))
+    df_defense = clean_name_col(spark.read.format("parquet").load(f"gs://{bucket_name}/{output_destination}/raw_defense"))
+    df_goalies = clean_name_col(spark.read.format("parquet").load(f"gs://{bucket_name}/{output_destination}/raw_goalies"))
     df_plays_with_onice = append_nonea_onice_info(df_plays, df_forwards, df_defense, df_goalies)
-    df_plays_with_onice.write.format("parquet").save("/FileStore/NHL_PLAYS_DB/plays_with_onice", mode = 'append')
+    df_plays_with_onice.write.format("parquet").save(f"gs://{bucket_name}/{output_destination}/plays_with_onice", mode = 'append')
 
     spark.stop()
