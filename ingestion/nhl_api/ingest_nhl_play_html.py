@@ -6,7 +6,6 @@ import pyspark
 import re
 from bs4 import BeautifulSoup
 import pyspark.sql.functions as f
-spark.conf.set("spark.sql.execution.arrow.pyspark.enabled", "false")
 from pyspark.sql import Row
 from pyspark.sql.types import ArrayType, IntegerType, StringType
 from pyspark.sql.types import *
@@ -323,6 +322,7 @@ if __name__ == "__main__":
     spark = pyspark.sql.SparkSession.builder \
         .appName("NHL Play Ingestion to GCP") \
         .getOrCreate()
+    spark.conf.set("spark.sql.execution.arrow.pyspark.enabled", "false")
 
     bucket_name = args.output_bucket
     output_destination = args.output_destination
