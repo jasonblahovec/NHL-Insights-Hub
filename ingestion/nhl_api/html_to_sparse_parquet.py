@@ -132,11 +132,8 @@ def get_shot_detail(df_batch):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="NHL Data Ingestion to GCP")
-    parser.add_argument("--gamemin", type=int, help="Starting NHL gameid for data retrieval")
-    parser.add_argument("--gamemax", type=int, help="Ending NHL gameid for data retrieval")
     parser.add_argument("--output_bucket", type=str, help="a GCS Bucket")
     parser.add_argument("--output_destination", type=str, help="a location within GCS bucket where output is stored")
-    parser.add_argument("--write_mode", type=str, help="overwrite or append, as used in spark.write.*")
     args = parser.parse_args()
 
     spark = pyspark.sql.SparkSession.builder \
@@ -147,10 +144,6 @@ if __name__ == "__main__":
 
     bucket_name = args.output_bucket
     output_destination = args.output_destination
-    write_mode = args.write_mode
-    game_min = args.gamemin
-    game_max = args.gamemax
-
 
     spark.conf.set("spark.sql.execution.arrow.pyspark.enabled", "false")
     df_plays_with_onice = spark.read.format("parquet").load(f"gs://{bucket_name}/{output_destination}/plays_with_onice")
