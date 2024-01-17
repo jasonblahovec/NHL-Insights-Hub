@@ -28,15 +28,15 @@ class PlayerGameCorsi():
     def set_player_id(self,_val):
         self.player_id = _val
 
-    def __init__(self, fs_plays, fs_forwards, fs_defense):
+    def __init__(self, fs_plays, fs_forwards, fs_defense, bucket):
         self.fs_plays = fs_plays
         self.fs_forwards = fs_forwards
         self.fs_defense = fs_defense
 
         # Input Files to DF:
-        self.df_plays = spark.read.format("parquet").load(self.fs_plays)
-        self.df_forwards = spark.read.format("parquet").load(self.fs_forwards)
-        self.df_defense = spark.read.format("parquet").load(self.fs_defense)
+        self.df_plays = spark.read.format("parquet").load(f"gs://{bucket}/{self.fs_plays}")
+        self.df_forwards = spark.read.format("parquet").load(f"gs://{bucket}/{self.fs_forwards}")
+        self.df_defense = spark.read.format("parquet").load(f"gs://{bucket}/{self.fs_defense}")
 
         self.df_plays.createOrReplaceTempView('nhl_plays')
 
@@ -280,7 +280,7 @@ if __name__ == "__main__":
     spark.conf.set("spark.sql.execution.arrow.pyspark.enabled", "false")
 
     
-    corsi = PlayerGameCorsi(fs_plays, fs_forwards, fs_defense)
+    corsi = PlayerGameCorsi(fs_plays, fs_forwards, fs_defense, bucket_name)
     corsi.get_teams()
     df_all_team_result, df_all_player_game_output = corsi.run_all_team_analysis()
 
