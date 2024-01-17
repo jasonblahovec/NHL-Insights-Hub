@@ -277,6 +277,7 @@ if __name__ == "__main__":
 
     
     corsi = PlayerGameCorsi(fs_plays, fs_forwards, fs_defense)
+    corsi.get_teams()
     df_all_team_result = corsi.run_all_team_analysis()
 
     # Save the result as a Parquet file
