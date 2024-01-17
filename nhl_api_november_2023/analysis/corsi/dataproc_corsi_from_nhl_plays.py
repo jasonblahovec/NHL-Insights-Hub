@@ -34,9 +34,9 @@ class PlayerGameCorsi():
         self.fs_defense = fs_defense
 
         # Input Files to DF:
-        self.df_plays = spark.read.format("parquet").load(self.fs_plays).load(f"gs://{bucket_name}/{self.fs_plays}")
-        self.df_forwards = spark.read.format("parquet").load(self.fs_forwards).load(f"gs://{bucket_name}/{self.fs_forwards}")
-        self.df_defense = spark.read.format("parquet").load(self.fs_defense).load(f"gs://{bucket_name}/{self.fs_defense}")
+        self.df_plays = spark.read.format("parquet").load(f"gs://{bucket_name}/{self.fs_plays}")
+        self.df_forwards = spark.read.format("parquet").load(f"gs://{bucket_name}/{self.fs_forwards}")
+        self.df_defense = spark.read.format("parquet").load(f"gs://{bucket_name}/{self.fs_defense}")
 
         self.df_plays.createOrReplaceTempView('nhl_plays')
 
