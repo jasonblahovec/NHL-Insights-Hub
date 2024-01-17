@@ -281,6 +281,6 @@ if __name__ == "__main__":
     df_all_team_result = corsi.run_all_team_analysis()
 
     # Save the result as a Parquet file
-    df_all_team_result.write.format("parquet").save(f"gs://{bucket_name}/{output_location}/plays_sparse_detail", mode = 'overwrite')
+    df_all_team_result.write.format("parquet").save(f"gs://{bucket_name}/{output_location}", mode = 'overwrite')
 
     spark.stop()
