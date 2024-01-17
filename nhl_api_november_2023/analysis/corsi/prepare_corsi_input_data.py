@@ -38,10 +38,10 @@ if __name__ == "__main__":
     df_forwards_input = spark.read.format("parquet").load(f"gs://{input_bucket_name}/{input_fs_forwards}").withColumn("hashmod", f.expr(f"abs(hash(cast(game_id as float))) % {hm_count}"))
     df_defense_input = spark.read.format("parquet").load(f"gs://{input_bucket_name}/{input_fs_defense}").withColumn("hashmod", f.expr(f"abs(hash(cast(game_id as float))) % {hm_count}"))
 
-    df_plays_input.write.format("parquet").save(f"gs://{output_bucket_name}/{output_fs_plays}", mode = 'overwrite')
+    df_plays_input.repartition('hashmod').write.format("parquet").save(f"gs://{output_bucket_name}/{output_fs_plays}", mode = 'overwrite')
 
-    df_forwards_input.write.format("parquet").save(f"gs://{output_bucket_name}/{output_fs_forwards}", mode = 'overwrite')
+    df_forwards_input.repartition('hashmod').write.format("parquet").save(f"gs://{output_bucket_name}/{output_fs_forwards}", mode = 'overwrite')
 
-    df_defense_input.write.format("parquet").save(f"gs://{output_bucket_name}/{output_fs_defense}", mode = 'overwrite')
+    df_defense_input.repartition('hashmod').write.format("parquet").save(f"gs://{output_bucket_name}/{output_fs_defense}", mode = 'overwrite')
 
     spark.stop()
