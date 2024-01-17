@@ -278,10 +278,6 @@ if __name__ == "__main__":
     df_plays_with_onice = spark.read.format("parquet").load(f"gs://{bucket_name}/{fs_plays}/plays_with_onice")
     df_plays_with_onice = spark.read.format("parquet").load(f"gs://{bucket_name}/{fs_plays}/plays_with_onice")
     
-    # fs_plays = '/FileStore/NHL_PLAYS_DB/partitioned_nhl_plays_2022'
-    # fs_forwards = '/FileStore/NHL_PLAYS_DB/partitioned_forwards_2022'
-    # fs_defense = '/FileStore/NHL_PLAYS_DB/partitioned_defense_2022'
-
     corsi = PlayerGameCorsi(fs_plays, fs_forwards, fs_defense)
     df_all_team_result = corsi.run_all_team_analysis()
 
