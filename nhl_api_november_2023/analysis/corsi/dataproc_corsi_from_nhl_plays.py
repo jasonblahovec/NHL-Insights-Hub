@@ -17,7 +17,7 @@ class PlayerGameCorsi():
         self.player_team = _val
 
     def show_players(self):
-        self.team_players_key = self.df_skater_toi.where(f.expr(f"side = '{self.player_team}'")).groupBy("playerid","side",f.expr("name['default'] as name")).agg( \
+        self.team_players_key = self.df_skater_toi.where(f.expr(f"side = '{self.player_team}'")).groupBy("playerid","side","position",f.expr("name['default'] as name")).agg( \
             f.countDistinct('game_id').alias("games_played") \
                 ,f.sum('toi_s').alias("toi_s") \
                     ,(f.sum('toi_s')/f.countDistinct('game_id')).alias('toipg')
@@ -34,9 +34,9 @@ class PlayerGameCorsi():
         self.fs_defense = fs_defense
 
         # Input Files to DF:
-        self.df_plays = spark.read.format("parquet").load(f"gs://{bucket_name}/{self.fs_plays}")
-        self.df_forwards = spark.read.format("parquet").load(f"gs://{bucket_name}/{self.fs_forwards}")
-        self.df_defense = spark.read.format("parquet").load(f"gs://{bucket_name}/{self.fs_defense}")
+        self.df_plays = spark.read.format("parquet").load(self.fs_plays)
+        self.df_forwards = spark.read.format("parquet").load(self.fs_forwards)
+        self.df_defense = spark.read.format("parquet").load(self.fs_defense)
 
         self.df_plays.createOrReplaceTempView('nhl_plays')
 
@@ -44,14 +44,14 @@ class PlayerGameCorsi():
 
     @staticmethod
     def query_player_timeonice_plusminus(df_forwards, df_defense):
-        df_forwards_toi = df_forwards[['game_id','playerid', 'side', 'name','plusminus', 'powerplaytoi', 'shorthandedtoi', 'toi']] \
+        df_forwards_toi = df_forwards[['game_id','playerid', 'side', 'name','plusminus', 'powerplaytoi', 'shorthandedtoi', 'toi','position']] \
             .withColumn("toi_s", f.expr("(split(toi,':')[0]*60)+split(toi,':')[1]")) \
                 .withColumn("powerplaytoi_s", f.expr("(split(powerplaytoi,':')[0]*60)+split(powerplaytoi,':')[1]")) \
                 .withColumn("shorthandedtoi_s", f.expr("(split(shorthandedtoi,':')[0]*60)+split(shorthandedtoi,':')[1]")) \
                     .withColumn("evenstrengthtoi_s",f.expr("toi_s - powerplaytoi_s - shorthandedtoi_s"))
 
 
-        df_defense_toi = df_defense[['game_id','playerid', 'side', 'name','plusminus', 'powerplaytoi', 'shorthandedtoi', 'toi']] \
+        df_defense_toi = df_defense[['game_id','playerid', 'side', 'name','plusminus', 'powerplaytoi', 'shorthandedtoi', 'toi','position']] \
             .withColumn("toi_s", f.expr("(split(toi,':')[0]*60)+split(toi,':')[1]")) \
                 .withColumn("powerplaytoi_s", f.expr("(split(powerplaytoi,':')[0]*60)+split(powerplaytoi,':')[1]")) \
                 .withColumn("shorthandedtoi_s", f.expr("(split(shorthandedtoi,':')[0]*60)+split(shorthandedtoi,':')[1]")) \
@@ -146,14 +146,14 @@ class PlayerGameCorsi():
         return df_corsi_out
 
     def run_analysis(self):
-        # Create a reference by game_id and player_id of time on ice and plus minus, to be appended to final output for Corsi/60.
-        df_skater_toi = self.query_player_timeonice_plusminus(self.df_forwards, self.df_defense)
+        # # Create a reference by game_id and player_id of time on ice and plus minus, to be appended to final output for Corsi/60.
+        # df_skater_toi = self.query_player_timeonice_plusminus(self.df_forwards, self.df_defense)
 
         # Run Corsi Analysis for request player and team
         df_corsi_out = self.player_corsi_by_game(self.df_plays, self.player_team, self.player_id)
 
         # Join Corsi Output to TOI info for _per_60 calculation:
-        df_corsi_final = df_corsi_out.join(df_skater_toi.where(f.expr(f"playerid = {self.player_id}")),"game_id","inner") \
+        df_corsi_final = df_corsi_out.join(self.df_skater_toi.where(f.expr(f"playerid = {self.player_id}")),"game_id","inner") \
             .withColumn("corsi_for_per_es60", f.expr("corsi_for *(3600/evenstrengthtoi_s)")) \
             .withColumn("corsi_against_per_es60", f.expr("corsi_against *(3600/evenstrengthtoi_s)")) \
             .withColumn("corsi_per_es60", f.expr("corsi_for_per_es60-corsi_against_per_es60"))
@@ -170,6 +170,7 @@ class PlayerGameCorsi():
                 df_output = df_player_game_corsi
             else:
                 df_output = df_output.union(df_player_game_corsi)
+            
             rdd_out = df_player_game_corsi.agg(
                 f.avg('corsi_for').alias('corsi_for')
                 ,f.avg('corsi_against').alias('corsi_against')
@@ -192,6 +193,7 @@ class PlayerGameCorsi():
             out_records = out_records + [[
                 player_record.playerid
                 , player_record.name
+                , player_record.position
                 , player_record.games_played
                 , player_record.toipg
                 , rdd_out[0].corsi_for
@@ -217,6 +219,7 @@ class PlayerGameCorsi():
         return spark.createDataFrame(pd.DataFrame(out_records, columns = [
                 'playerid'
                 , 'name'
+                , 'position'
                 , 'games_played'
                 , 'toipg'
                 , 'corsi_for'
@@ -236,21 +239,22 @@ class PlayerGameCorsi():
                 , 'corsi_for_per_es60'
                 , 'corsi_against_per_es60'
                 , 'average_corsi_per_60'
-        ])).withColumn("team", f.lit(self.player_team))
+        ])).withColumn("team", f.lit(self.player_team)), df_output
 
     def run_all_team_analysis(self):
-        for _team_i, team in enumerate(self.teams_key.collect()[0:10]):
+        for _team_i, team in enumerate(self.teams_key.collect()[0:2]):
             self.set_team(team.side)
 
             # must update df players key inside this function.:
             self.show_players()
 
             if _team_i==0:
-                df_all_team_output = self.run_team_analysis()
+                df_all_team_output, df_all_player_game_output = self.run_team_analysis()
             else:
-                df_all_team_output = df_all_team_output.union(self.run_team_analysis())
-        return df_all_team_output
-
+                a,b = self.run_team_analysis()
+                df_all_team_output = df_all_team_output.union(a)
+                df_all_player_game_output = df_all_player_game_output.union(b)
+        return df_all_team_output, df_all_player_game_output
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="NHL Data Ingestion to GCP")
