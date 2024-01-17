@@ -34,9 +34,9 @@ class PlayerGameCorsi():
         self.fs_defense = fs_defense
 
         # Input Files to DF:
-        self.df_plays = spark.read.format("parquet").load(self.fs_plays)
-        self.df_forwards = spark.read.format("parquet").load(self.fs_forwards)
-        self.df_defense = spark.read.format("parquet").load(self.fs_defense)
+        self.df_plays = spark.read.format("parquet").load(self.fs_plays).load(f"gs://{bucket_name}/{self.fs_plays}")
+        self.df_forwards = spark.read.format("parquet").load(self.fs_forwards).load(f"gs://{bucket_name}/{self.fs_forwards}")
+        self.df_defense = spark.read.format("parquet").load(self.fs_defense).load(f"gs://{bucket_name}/{self.fs_defense}")
 
         self.df_plays.createOrReplaceTempView('nhl_plays')
 
@@ -274,9 +274,7 @@ if __name__ == "__main__":
     output_location = args.output_location
 
     spark.conf.set("spark.sql.execution.arrow.pyspark.enabled", "false")
-    df_plays_with_onice = spark.read.format("parquet").load(f"gs://{bucket_name}/{fs_plays}")
-    df_plays_with_onice = spark.read.format("parquet").load(f"gs://{bucket_name}/{fs_plays}")
-    df_plays_with_onice = spark.read.format("parquet").load(f"gs://{bucket_name}/{fs_plays}")
+
     
     corsi = PlayerGameCorsi(fs_plays, fs_forwards, fs_defense)
     df_all_team_result = corsi.run_all_team_analysis()
