@@ -163,7 +163,7 @@ class PlayerGameCorsi():
     def run_team_analysis(self):        
         out_records = []
         for i,player_record in enumerate(self.team_players_key.collect()[:]):
-            print(player_record.playerid, player_record.name, player_record.games_played, player_record.toipg)
+            # print(player_record.playerid, player_record.name, player_record.games_played, player_record.toipg)
             self.set_player_id(player_record.playerid)
             df_player_game_corsi = self.run_analysis()
             if i==0:
@@ -244,7 +244,7 @@ class PlayerGameCorsi():
     def run_all_team_analysis(self):
         for _team_i, team in enumerate(self.teams_key.collect()):
             self.set_team(team.side)
-
+            print(team.side)
             # must update df players key inside this function.:
             self.show_players()
 
