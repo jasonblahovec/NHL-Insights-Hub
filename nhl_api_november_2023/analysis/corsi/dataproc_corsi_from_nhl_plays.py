@@ -239,7 +239,7 @@ class PlayerGameCorsi():
         ])).withColumn("team", f.lit(self.player_team))
 
     def run_all_team_analysis(self):
-        for _team_i, team in enumerate(self.teams_key.collect()):
+        for _team_i, team in enumerate(self.teams_key.collect()[0:10]):
             self.set_team(team.side)
 
             # must update df players key inside this function.:
