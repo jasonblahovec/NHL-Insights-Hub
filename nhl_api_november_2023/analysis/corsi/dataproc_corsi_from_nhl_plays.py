@@ -153,7 +153,7 @@ class PlayerGameCorsi():
         df_corsi_out = self.player_corsi_by_game(self.df_plays, self.player_team, self.player_id)
 
         # Join Corsi Output to TOI info for _per_60 calculation:
-        df_corsi_final = df_corsi_out.join(self.df_skater_toi.where(f.expr(f"playerid = {self.player_id}")),"game_id","inner") \
+        df_corsi_final = df_corsi_out.join(self.df_skater_toi.where(f.expr(f"playerid = {self.player_id}")),["game_id,'player_id"],"inner") \
             .withColumn("corsi_for_per_es60", f.expr("corsi_for *(3600/evenstrengthtoi_s)")) \
             .withColumn("corsi_against_per_es60", f.expr("corsi_against *(3600/evenstrengthtoi_s)")) \
             .withColumn("corsi_per_es60", f.expr("corsi_for_per_es60-corsi_against_per_es60"))
@@ -241,29 +241,8 @@ class PlayerGameCorsi():
                 , 'average_corsi_per_60'
         ])).withColumn("team", f.lit(self.player_team)), df_output
 
-    def run_all_team_analysis(self, batch = 'league', single_team = None):
-        metropolitan = ['PHI','NJD','NYR','CAR','CBJ','NYI','WSH','PIT']
-
-        atlantic = ['FLA','TBL','MTL','BUF','OTT','DET','BOS','TOR']
-
-        pacific = ['ANA','LAK','VAN','EDM','SEA','VGK','SJS','CGY']
-
-        central = ['ARI','DAL','STL','MIN','COL','NSH','CHI','WPG']
-
-        league = metropolitan+atlantic+pacific+central
-        
-        if batch == 'league':
-            batch_list = league
-        elif batch =='metropolitan':
-            batch_list = metropolitan
-        elif batch =='pacific':
-            batch_list = pacific
-        elif batch =='atlantic':
-            batch_list = atlantic
-        elif batch =='central':
-            batch_list = central
-        elif batch =='none' and single_team is not None:
-            batch_list = [single_team]
+    def execute_team_analysis(self, single_team = None):        
+        batch_list = [single_team]
 
         for _team_i, team in enumerate(self.teams_key.collect()):
             found = False
@@ -290,7 +269,6 @@ if __name__ == "__main__":
     parser.add_argument("--fs_forwards", type=str, help="location of ingested NHL Forwards data from ingest_nhl_plays")
     parser.add_argument("--fs_defense", type=str, help="location of ingested NHL Deffense data from ingest_nhl_plays")
     parser.add_argument("--output_location", type=str, help="location of ingested NHL Deffense data from ingest_nhl_plays")
-    parser.add_argument("--batch", type=str, help="one of league, metropolitan, atlantic, central, or pacific; the data to ingest")
     parser.add_argument("--single_team", type=str, help="Team Code for one team output")
     parser.add_argument("--write_mode", type=str, help="overwrite or append")
     args = parser.parse_args()
@@ -305,16 +283,17 @@ if __name__ == "__main__":
     fs_plays = args.fs_plays
     fs_forwards = args.fs_forwards
     fs_defense = args.fs_defense
-    batch = args.batch
     write_mode = args.write_mode
     output_location = args.output_location
     single_team = args.single_team
     
     corsi = PlayerGameCorsi(fs_plays, fs_forwards, fs_defense, bucket_name)
     corsi.get_teams()
-    df_all_team_result, df_all_player_game_output = corsi.run_all_team_analysis(batch = batch, single_team = single_team)
+    df_all_team_result, df_all_player_game_output = corsi.execute_team_analysis(single_team = single_team)
+
+    df_all_player_game_output.withColumn("hashed_player_id", (f.hash(f.col("player_id")) % 50).cast("int"))
 
     # Save the result as a Parquet file
-    df_all_team_result.write.format("parquet").save(f"gs://{bucket_name}/{output_location}/team_player_summary", mode = write_mode)
-    df_all_player_game_output.write.format("parquet").save(f"gs://{bucket_name}/{output_location}/team_player_game_detail", mode = write_mode)
+    df_all_team_result.repartition(1).write.format("parquet").save(f"gs://{bucket_name}/{output_location}/team_player_summary", mode = write_mode)
+    df_all_player_game_output.repartition('hashed_player_id').write.format("parquet").save(f"gs://{bucket_name}/{output_location}/team_player_game_detail", mode = write_mode)
     spark.stop()
