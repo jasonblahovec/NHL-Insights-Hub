@@ -291,6 +291,7 @@ if __name__ == "__main__":
     corsi.get_teams()
     df_all_team_result, df_all_player_game_output = corsi.execute_team_analysis(single_team = single_team)
 
+    
     df_all_player_game_output.withColumn("hashed_player_id", (f.hash(f.col("player_id")) % 50).cast("int"))
 
     # Save the result as a Parquet file
