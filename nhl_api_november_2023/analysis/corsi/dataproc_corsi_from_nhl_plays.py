@@ -241,7 +241,7 @@ class PlayerGameCorsi():
                 , 'average_corsi_per_60'
         ])).withColumn("team", f.lit(self.player_team)), df_output
 
-    def run_all_team_analysis(self, batch = 'league'):
+    def run_all_team_analysis(self, batch = 'league', single_team = None):
         metropolitan = ['PHI','NJD','NYR','CAR','CBJ','NYI','WSH','PIT']
 
         atlantic = ['FLA','TBL','MTL','BUF','OTT','DET','BOS','TOR']
@@ -262,6 +262,8 @@ class PlayerGameCorsi():
             batch_list = atlantic
         elif batch =='central':
             batch_list = central
+        elif batch =='none' and single_team is not None:
+            batch_list = [single_team]
 
         for _team_i, team in enumerate(self.teams_key.collect()):
             found = False
@@ -289,6 +291,7 @@ if __name__ == "__main__":
     parser.add_argument("--fs_defense", type=str, help="location of ingested NHL Deffense data from ingest_nhl_plays")
     parser.add_argument("--output_location", type=str, help="location of ingested NHL Deffense data from ingest_nhl_plays")
     parser.add_argument("--batch", type=str, help="one of league, metropolitan, atlantic, central, or pacific; the data to ingest")
+    parser.add_argument("--single_team", type=str, help="Team Code for one team output")
     parser.add_argument("--write_mode", type=str, help="overwrite or append")
     args = parser.parse_args()
 
@@ -305,13 +308,11 @@ if __name__ == "__main__":
     batch = args.batch
     write_mode = args.write_mode
     output_location = args.output_location
-
-    spark.conf.set("spark.sql.execution.arrow.pyspark.enabled", "false")
-
+    single_team = args.single_team
     
     corsi = PlayerGameCorsi(fs_plays, fs_forwards, fs_defense, bucket_name)
     corsi.get_teams()
-    df_all_team_result, df_all_player_game_output = corsi.run_all_team_analysis(batch = batch)
+    df_all_team_result, df_all_player_game_output = corsi.run_all_team_analysis(batch = batch, single_team = single_team)
 
     # Save the result as a Parquet file
     df_all_team_result.write.format("parquet").save(f"gs://{bucket_name}/{output_location}/team_player_summary", mode = write_mode)
