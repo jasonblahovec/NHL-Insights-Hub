@@ -291,8 +291,9 @@ if __name__ == "__main__":
     corsi.get_teams()
     df_all_team_result, df_all_player_game_output = corsi.execute_team_analysis(single_team = single_team)
 
-    
-    df_all_player_game_output.withColumn("hashed_player_id", (f.hash(f.col("player_id")) % 50).cast("int"))
+
+    df_all_player_game_output = df_all_player_game_output \
+        .withColumn("hashed_player_id", (f.hash(f.col("player_id")) % 50).cast("int"))
 
     # Save the result as a Parquet file
     df_all_team_result.repartition(1).write.format("parquet").save(f"gs://{bucket_name}/{output_location}/team_player_summary", mode = write_mode)
