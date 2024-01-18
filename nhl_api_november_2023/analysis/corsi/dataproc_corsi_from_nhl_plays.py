@@ -241,19 +241,41 @@ class PlayerGameCorsi():
                 , 'average_corsi_per_60'
         ])).withColumn("team", f.lit(self.player_team)), df_output
 
-    def run_all_team_analysis(self):
-        for _team_i, team in enumerate(self.teams_key.collect()):
-            self.set_team(team.side)
-            print(team.side)
-            # must update df players key inside this function.:
-            self.show_players()
+    def run_all_team_analysis(self, batch = 'league'):
+        metropolitan = ['PHI','NJD','NYR','CAR','CBJ','NYI','WSH','PIT']
 
-            if _team_i==0:
-                df_all_team_output, df_all_player_game_output = self.run_team_analysis()
-            else:
-                a,b = self.run_team_analysis()
-                df_all_team_output = df_all_team_output.union(a)
-                df_all_player_game_output = df_all_player_game_output.union(b)
+        atlantic = ['FLA','TBL','MTL','BUF','OTT','DET','BOS','TOR']
+
+        pacific = ['ANA','LAK','VAN','EDM','SEA','VGK','SJS','CGY']
+
+        central = ['ARI','DAL','STL','MIN','COL','NSH','CHI','WPG']
+
+        league = metropolitan+atlantic+pacific+central
+        
+        if batch == 'league':
+            batch_list = league
+        elif batch =='metropolitan':
+            batch_list = metropolitan
+        elif batch =='pacific':
+            batch_list = pacific
+        elif batch =='atlantic':
+            batch_list = atlantic
+        elif batch =='central':
+            batch_list = central
+
+        for _team_i, team in enumerate(self.teams_key.collect()):
+            if team.side in batch_list:
+                self.set_team(team.side)
+                print(team.side)
+                # must update df players key inside this function.:
+                self.show_players()
+
+                if _team_i==0:
+                    df_all_team_output, df_all_player_game_output = self.run_team_analysis()
+                else:
+                    a,b = self.run_team_analysis()
+                    df_all_team_output = df_all_team_output.union(a)
+                    df_all_player_game_output = df_all_player_game_output.union(b)
         return df_all_team_output, df_all_player_game_output
 
 if __name__ == "__main__":
@@ -263,6 +285,8 @@ if __name__ == "__main__":
     parser.add_argument("--fs_forwards", type=str, help="location of ingested NHL Forwards data from ingest_nhl_plays")
     parser.add_argument("--fs_defense", type=str, help="location of ingested NHL Deffense data from ingest_nhl_plays")
     parser.add_argument("--output_location", type=str, help="location of ingested NHL Deffense data from ingest_nhl_plays")
+    parser.add_argument("--batch", type=str, help="one of league, metropolitan, atlantic, central, or pacific; the data to ingest")
+    parser.add_argument("--write_mode", type=str, help="overwrite or append")
     args = parser.parse_args()
 
     spark = pyspark.sql.SparkSession.builder \
@@ -275,16 +299,17 @@ if __name__ == "__main__":
     fs_plays = args.fs_plays
     fs_forwards = args.fs_forwards
     fs_defense = args.fs_defense
-    output_location = args.output_location
+    batch = args.batch
+    write_mode = args.write_mode
 
     spark.conf.set("spark.sql.execution.arrow.pyspark.enabled", "false")
 
     
     corsi = PlayerGameCorsi(fs_plays, fs_forwards, fs_defense, bucket_name)
     corsi.get_teams()
-    df_all_team_result, df_all_player_game_output = corsi.run_all_team_analysis()
+    df_all_team_result, df_all_player_game_output = corsi.run_all_team_analysis(batch = batch)
 
     # Save the result as a Parquet file
-    # df_all_team_result.write.format("parquet").save(f"gs://{bucket_name}/{output_location}/team_player_summary", mode = 'overwrite')
-    df_all_player_game_output.write.format("parquet").save(f"gs://{bucket_name}/{output_location}/team_player_game_detail", mode = 'overwrite')
+    df_all_team_result.write.format("parquet").save(f"gs://{bucket_name}/{output_location}/team_player_summary", mode = write_mode)
+    df_all_player_game_output.write.format("parquet").save(f"gs://{bucket_name}/{output_location}/team_player_game_detail", mode = write_mode)
     spark.stop()
