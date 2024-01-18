@@ -301,6 +301,7 @@ if __name__ == "__main__":
     fs_defense = args.fs_defense
     batch = args.batch
     write_mode = args.write_mode
+    output_location = args.output_location
 
     spark.conf.set("spark.sql.execution.arrow.pyspark.enabled", "false")
 
