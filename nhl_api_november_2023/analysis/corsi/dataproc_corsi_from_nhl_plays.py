@@ -158,7 +158,7 @@ class PlayerGameCorsi():
             .withColumn("corsi_against_per_es60", f.expr("corsi_against *(3600/evenstrengthtoi_s)")) \
             .withColumn("corsi_per_es60", f.expr("corsi_for_per_es60-corsi_against_per_es60"))
             
-        return df_corsi_final
+        return df_corsi_final.withColumn("player_id", f.lit(self.player_id))
     
     def run_team_analysis(self):        
         out_records = []
