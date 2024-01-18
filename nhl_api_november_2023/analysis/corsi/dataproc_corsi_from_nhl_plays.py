@@ -242,7 +242,7 @@ class PlayerGameCorsi():
         ])).withColumn("team", f.lit(self.player_team)), df_output
 
     def run_all_team_analysis(self, batch = 'league'):
-        metropolitan = ['PHI','NJD','NYR','CAR','CBJ','NYI','WSH','PIT']
+        metropolitan = ['PHI']#,'NJD','NYR','CAR','CBJ','NYI','WSH','PIT']
 
         atlantic = ['FLA','TBL','MTL','BUF','OTT','DET','BOS','TOR']
 
