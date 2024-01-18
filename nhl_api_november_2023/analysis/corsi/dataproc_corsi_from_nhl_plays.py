@@ -264,18 +264,21 @@ class PlayerGameCorsi():
             batch_list = central
 
         for _team_i, team in enumerate(self.teams_key.collect()):
+            found = False
             if team.side in batch_list:
                 self.set_team(team.side)
                 print(team.side)
                 # must update df players key inside this function.:
                 self.show_players()
 
-                if _team_i==0:
+                if _team_i==0 or not found:
                     df_all_team_output, df_all_player_game_output = self.run_team_analysis()
+                    found = True
                 else:
                     a,b = self.run_team_analysis()
                     df_all_team_output = df_all_team_output.union(a)
                     df_all_player_game_output = df_all_player_game_output.union(b)
+                    found = True
         return df_all_team_output, df_all_player_game_output
 
 if __name__ == "__main__":
