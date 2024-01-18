@@ -153,7 +153,7 @@ class PlayerGameCorsi():
         df_corsi_out = self.player_corsi_by_game(self.df_plays, self.player_team, self.player_id)
 
         # Join Corsi Output to TOI info for _per_60 calculation:
-        df_corsi_final = df_corsi_out.join(self.df_skater_toi.where(f.expr(f"playerid = {self.player_id}")),["game_id,'player_id"],"inner") \
+        df_corsi_final = df_corsi_out.join(self.df_skater_toi.where(f.expr(f"playerid = {self.player_id}")),["game_id","player_id"],"inner") \
             .withColumn("corsi_for_per_es60", f.expr("corsi_for *(3600/evenstrengthtoi_s)")) \
             .withColumn("corsi_against_per_es60", f.expr("corsi_against *(3600/evenstrengthtoi_s)")) \
             .withColumn("corsi_per_es60", f.expr("corsi_for_per_es60-corsi_against_per_es60"))
