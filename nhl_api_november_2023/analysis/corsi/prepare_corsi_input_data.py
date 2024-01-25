@@ -34,12 +34,12 @@ if __name__ == "__main__":
     hm_count = args.hm_count
 
     spark.conf.set("spark.sql.execution.arrow.pyspark.enabled", "false")
-    df_plays_input = spark.read.format("parquet").load(f"gs://{input_bucket_name}/{input_fs_plays}").withColumn("hashmod", f.expr(f"abs(hash(cast(game_id as float))) % {hm_count}"))
-    df_forwards_input = spark.read.format("parquet").load(f"gs://{input_bucket_name}/{input_fs_forwards}").withColumn("hashmod", f.expr(f"abs(hash(cast(game_id as float))) % {hm_count}"))
-    df_defense_input = spark.read.format("parquet").load(f"gs://{input_bucket_name}/{input_fs_defense}").withColumn("hashmod", f.expr(f"abs(hash(cast(game_id as float))) % {hm_count}"))
+    df_plays_input = spark.read.format("parquet").load(f"gs://{input_bucket_name}/{input_fs_plays}").withColumn("hashmod", f.expr(f"abs(hash(cast(game_id as float))) % {hm_count}")).distinct()
+    df_forwards_input = spark.read.format("parquet").load(f"gs://{input_bucket_name}/{input_fs_forwards}").withColumn("hashmod", f.expr(f"abs(hash(cast(game_id as float))) % {hm_count}")).distinct()
+    df_defense_input = spark.read.format("parquet").load(f"gs://{input_bucket_name}/{input_fs_defense}").withColumn("hashmod", f.expr(f"abs(hash(cast(game_id as float))) % {hm_count}")).distinct()
 
     # some duplication exists in the 2021_2022 season (game_id 0500 - 0900).  Handling here:
-    df_plays_input.distinct().repartition('hashmod').write.format("parquet").save(f"gs://{output_bucket_name}/{output_fs_plays}", mode = 'overwrite')
+    df_plays_input.repartition('hashmod').write.format("parquet").save(f"gs://{output_bucket_name}/{output_fs_plays}", mode = 'overwrite')
 
     df_forwards_input.distinct().repartition('hashmod').write.format("parquet").save(f"gs://{output_bucket_name}/{output_fs_forwards}", mode = 'overwrite')
 
