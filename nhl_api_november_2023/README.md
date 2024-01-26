@@ -45,13 +45,3 @@ The `analysis` directory is intended to be expanded with additional analytical p
 ## Contributing
 
 Contributions to expand the analytical capabilities of this project are welcome. Please follow standard Git practices for contributing to this repository.
-
-## License
-
-[Specify License Here]
-
-## Contact
-
-[Your Contact Information]
-
-Please ensure to replace placeholders like `[Specify License Here]` and `[Your Contact Information]` with actual information relevant to your project.
