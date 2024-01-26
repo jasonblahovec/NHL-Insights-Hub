@@ -372,10 +372,10 @@ if __name__ == "__main__":
     print(errors)
 
 
-    df_out.write.format("parquet").mode("overwrite").option("overwriteSchema", "true").save(f"gs://{bucket_name}/{output_destination}/raw_plays")
-    df_out_forwards.write.format("parquet").mode("overwrite").option("overwriteSchema", "true").save(f"gs://{bucket_name}/{output_destination}/raw_forwards")
-    df_out_defense.write.format("parquet").mode("overwrite").option("overwriteSchema", "true").save(f"gs://{bucket_name}/{output_destination}/raw_defense")
-    df_out_goalies.write.format("parquet").mode("overwrite").option("overwriteSchema", "true").save(f"gs://{bucket_name}/{output_destination}/raw_goalies")
+    df_out.write.format("parquet").mode(write_mode).option("overwriteSchema", "true").save(f"gs://{bucket_name}/{output_destination}/raw_plays")
+    df_out_forwards.write.format("parquet").mode(write_mode).option("overwriteSchema", "true").save(f"gs://{bucket_name}/{output_destination}/raw_forwards")
+    df_out_defense.write.format("parquet").mode(write_mode).option("overwriteSchema", "true").save(f"gs://{bucket_name}/{output_destination}/raw_defense")
+    df_out_goalies.write.format("parquet").mode(write_mode).option("overwriteSchema", "true").save(f"gs://{bucket_name}/{output_destination}/raw_goalies")
 
 
     df_plays = spark.read.format("parquet").load(f"gs://{bucket_name}/{output_destination}/raw_plays")
@@ -383,6 +383,6 @@ if __name__ == "__main__":
     df_defense = clean_name_col(spark.read.format("parquet").load(f"gs://{bucket_name}/{output_destination}/raw_defense"))
     df_goalies = clean_name_col(spark.read.format("parquet").load(f"gs://{bucket_name}/{output_destination}/raw_goalies"))
     df_plays_with_onice = append_nonea_onice_info(df_plays, df_forwards, df_defense, df_goalies)
-    df_plays_with_onice.write.format("parquet").save(f"gs://{bucket_name}/{output_destination}/plays_with_onice", mode = 'append')
+    df_plays_with_onice.write.format("parquet").save(f"gs://{bucket_name}/{output_destination}/plays_with_onice", mode = write_mode)
 
     spark.stop()
