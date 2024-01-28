@@ -1,4 +1,4 @@
-# NHL Data Analysis Pipeline
+# NHL-INSIGHTS-HUB: Main Directory
 
 This repository hosts a series of data processing and analysis pipelines focusing on NHL game data. The project is structured to facilitate data ingestion from the NHL API, pre-processing of ingested data, and subsequent analytical explorations like the Corsi analysis among other potential analyses.
 
