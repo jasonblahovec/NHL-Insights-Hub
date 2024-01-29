@@ -31,7 +31,7 @@ To use this pipeline, clone the repository and navigate to the desired analysis 
 
 ## Installation
 
-Ensure you have Python installed and set up Google Cloud SDK on your machine. For cluster-based execution, use Google Cloud Dataproc with the provided initialization script (`install_requirements.sh`) to install necessary dependencies on the cluster.
+Ensure you have Python installed and set up Google Cloud SDK on your machine. For cluster-based execution, use Google Cloud Dataproc with the provided initialization script (`ingest_nhl_plays/install_requirements.sh`) to install necessary dependencies on the cluster.
 
 ## Usage
 
@@ -41,7 +41,3 @@ Ensure you have Python installed and set up Google Cloud SDK on your machine. Fo
 ## Future Analysis
 
 The `analysis` directory is intended to be expanded with additional analytical projects. Future analyses can be added as separate directories within `analysis`, following a similar structure to the `corsi` project.
-
-## Contributing
-
-Contributions to expand the analytical capabilities of this project are welcome. Please follow standard Git practices for contributing to this repository.

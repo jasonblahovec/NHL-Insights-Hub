@@ -1,10 +1,10 @@
-# NHL Game Data Analysis Pipeline
+# Ingestion of Play-Level Dataset from NHL API
 
-This repository hosts a comprehensive pipeline for ingesting, processing, and analyzing National Hockey League (NHL) play-by-play data. It is designed to facilitate in-depth analysis of game dynamics, player performances, and team strategies through a structured data processing approach.
+This repository hosts a comprehensive pipeline for ingesting and processing National Hockey League (NHL) play-by-play data. It is designed to facilitate in-depth analysis of game dynamics, player performances, and team strategies through a structured data processing approach.
 
 ## Pipeline Structure
 
-The pipeline is organized into two primary phases, each contained within its own directory:
+The ingestion pipeline is organized into two primary phases, each contained within its own directory:
 
 1. **01_ingest_from_nhl_api**: This directory contains the script responsible for fetching play-by-play data and other relevant game information from the NHL's official API. It performs the initial steps of data cleansing, transformation, and enrichment to prepare the data for subsequent detailed analysis. The processed data is stored as structured Parquet files, optimized for efficient data processing.
 
@@ -17,7 +17,6 @@ To ensure the pipeline functions correctly, an `install_requirements.sh` script 
 - Python and Pip: For running the scripts and managing Python packages.
 - Requests, Pandas, and PySpark: Essential Python libraries for data fetching, manipulation, and processing.
 - Google Cloud SDK: For accessing Google Cloud Storage, Secret Manager, and other GCP services.
-- Jupyter: For interactive data exploration and analysis.
 
 ## Execution Flow
 
@@ -42,4 +41,4 @@ This pipeline serves as a robust platform for comprehensive NHL game data analys
 
 ## Contributions and Feedback
 
-We welcome contributions to enhance the pipeline's capabilities. Feel free to propose new features, optimizations, or bug fixes through pull requests. For questions or suggestions, please use the repository's
+We welcome contributions to enhance the pipeline's capabilities. Feel free to propose new features, optimizations, or bug fixes through pull requests.

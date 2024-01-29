@@ -15,7 +15,7 @@ Contains basic play-by-play event data from NHL games.
 - `home_team`: Abbreviation of the home team.
 - `index`: Index of the play within the game.
 - `period`: The period in which the play occurred.
-- `status`: Status of the game at the time of the play.
+- `status`: Status of the game at the time of the play (Power Play, Even Strength, Short Handed).
 - `type`: Type of play (e.g., goal, penalty).
 - `detail`: Detailed description of the play.
 - `time`: Game clock time at which the play occurred.
@@ -31,7 +31,7 @@ Contains statistics for forwards participating in the game.
 - `playerId`: Unique identifier for the player.
 - `sweaterNumber`: Jersey number of the player.
 - `name`: Name of the player.
-- `position`: Position of the player (should be 'Forward').
+- `position`: Position of the player.
 - `goals`: Number of goals scored by the player.
 - `assists`: Number of assists made by the player.
 - `points`: Total points scored by the player (goals + assists).

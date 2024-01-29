@@ -55,4 +55,3 @@ These tables are designed for analysts, coaches, and enthusiasts to:
 
 The output tables are stored in Google Cloud Storage in Parquet format and can be accessed using data processing tools that support Parquet, such as Apache Spark, Pandas, or Google BigQuery.
 
-For further analysis or queries regarding the dataset, please
