@@ -1,6 +1,6 @@
 # NHL Play-by-Play Detailed Data Processing
 
-This document outlines the processing of NHL play-by-play data to extract detailed information about specific events within a game, such as faceoffs, hits, blocked shots, missed shots, giveaways, penalties, goals, takeaways, and shots on goal.
+This document outlines the processing of NHL play-by-play data to extract detailed information about specific events within a game, such as faceoffs, hits, blocked shots, missed shots, giveaways, penalties, goals, takeaways, and shots on goal.  It is intended to be used in sequence with the outputs of `01_ingest_nhl_api`.
 
 ## Process Overview
 
