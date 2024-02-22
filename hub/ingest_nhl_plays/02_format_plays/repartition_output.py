@@ -8,6 +8,9 @@ if __name__ == "__main__":
     parser.add_argument("--output_bucket", type=str, help="a GCS Bucket")
     args = parser.parse_args()
 
+    input_bucket = args.input_bucket
+    output_bucket = args.output_bucket
+
     spark = pyspark.sql.SparkSession.builder \
         .appName("") \
         .getOrCreate()
