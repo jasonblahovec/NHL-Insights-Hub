@@ -1,6 +1,6 @@
 # NHL Insights Hub
 
-Welcome to the NHL Insights Hub, a comprehensive resource designed to bring data-driven insights into the world of NHL hockey.  Please see https://medium.com/@jasonblahovec/ transforming-nhl-play-level-data-for-data-science-86e9ae5bfb58 for an introduction to the project.
+Welcome to the NHL Insights Hub, a comprehensive resource designed to bring data-driven insights into the world of NHL hockey.  Please see https://medium.com/@jasonblahovec/transforming-nhl-play-level-data-for-data-science-86e9ae5bfb58 for an introduction to the project.
 
 ## Project Structure
 
